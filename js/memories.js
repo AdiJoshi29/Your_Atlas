@@ -79,7 +79,7 @@ window.memories = [
         lat: -9.4865,
         lng: 147.1540,
 
-        image: "photos/portmoresby.jpg",
+        image: "photos/portmoresby.jpeg",
 
         date: "2025",
 
@@ -138,13 +138,13 @@ window.memories = [
     {
         id: 9,
 
-        city: "Nanital",
-        location: "Nanital, India",
+        city: "Nainital",
+        location: "Nainital, India",
 
         lat: 30.8667,
         lng: 79.9333,
 
-        image: "photos/nanital.jpg",
+        image: "photos/nainital.jpg",
 
         date: "2025",
 
@@ -189,9 +189,8 @@ window.memories = [
         city: "Athens",
         location: "Athens, Georgia, USA",
 
-        lat: 33.9391,
-        lng: -84.5247,
-
+        lat: 33.7490,
+        lng: -84.3880,
         image: "photos/athens.jpeg",
 
         date: "2025",
@@ -205,8 +204,8 @@ window.memories = [
         city: "Atlanta",
         location: "Atlanta, Georgia, USA",
 
-        lat: 33.7490,
-        lng: -84.3880,
+        lat: 34.9391,
+        lng: -86.5247,
 
         image: "photos/atlanta.jpeg",
 
