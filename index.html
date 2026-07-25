@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Your Atlas ❤️</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+    <!-- CSS -->
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+</head>
+<body>
+
+    <!-- ========================================================= -->
+    <!-- Background -->
+    <!-- ========================================================= -->
+
+    <div class="background-texture"></div>
+    <div class="vignette"></div>
+
+    <!-- Decorative Compass -->
+
+    <img
+        class="compass"
+        src="assets/compass.svg"
+        alt="Compass"
+    >
+
+    <!-- ========================================================= -->
+    <!-- Hero -->
+    <!-- ========================================================= -->
+
+    <header class="hero">
+
+        <h1>
+            Happy Birthday Baba ❤️
+        </h1>
+
+
+    </header>
+
+    <!-- ========================================================= -->
+    <!-- Globe -->
+    <!-- ========================================================= -->
+
+    <div id="globeContainer">
+
+        <div id="globeViz"></div>
+
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- Memory Card -->
+    <!-- ========================================================= -->
+
+    <div id="memoryCard" class="hidden">
+
+        <button id="closeCard">
+            ×
+        </button>
+
+        <img
+            id="memoryImage"
+            src=""
+            alt="Memory"
+        >
+
+        <div class="memoryInfo">
+
+            <h2 id="memoryCity"></h2>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- Scripts -->
+    <!-- ========================================================= -->
+
+    <script src="js/memories.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
+
+    <script type="module">
+
+        import * as THREE from "https://esm.sh/three";
+
+        /* ---------------------------------------------------------
+           Globe
+        --------------------------------------------------------- */
+
+        const globeContainer = document.getElementById("globeViz");
+
+        const world = new Globe(globeContainer)
+
+            .globeImageUrl(
+                "//cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg"
+            )
+
+            .bumpImageUrl(
+                "//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png"
+            )
+
+            .backgroundColor("rgba(0,0,0,0)");
+
+        /* ---------------------------------------------------------
+           Better Material
+        --------------------------------------------------------- */
+
+        const globeMaterial = world.globeMaterial();
+
+        globeMaterial.bumpScale = 9;
+
+        new THREE.TextureLoader().load(
+
+            "//cdn.jsdelivr.net/npm/three-globe/example/img/earth-water.png",
+
+            texture => {
+
+                globeMaterial.specularMap = texture;
+
+                globeMaterial.specular = new THREE.Color("grey");
+
+                globeMaterial.shininess = 15;
+
+            }
+
+        );
+
+        /* ---------------------------------------------------------
+           Lighting
+        --------------------------------------------------------- */
+
+        const light = world
+            .lights()
+            .find(l => l.type === "DirectionalLight");
+
+        if (light) {
+
+            light.position.set(1, 1, 1);
+
+        }
+
+        /* ---------------------------------------------------------
+           Controls
+        --------------------------------------------------------- */
+
+        const controls = world.controls();
+
+        controls.autoRotate = false;
+        //controls.autoRotateSpeed = 0.35;
+
+        controls.enablePan = false;
+
+        controls.enableZoom = true;
+
+        controls.minDistance = 220;
+        controls.maxDistance = 220;
+
+        /* ---------------------------------------------------------
+           Resize
+        --------------------------------------------------------- */
+
+        function resizeGlobe() {
+
+            world
+                .width(globeContainer.clientWidth)
+                .height(globeContainer.clientHeight);
+
+        }
+
+        resizeGlobe();
+
+        window.addEventListener("resize", resizeGlobe);
+
+        /* ---------------------------------------------------------
+           HTML Markers
+        --------------------------------------------------------- */
+
+        world
+        // .htmlElementsData(window.memories)
+        // .htmlLat(d => d.lat)
+        // .htmlLng(d => d.lng)
+        // .htmlElement(d => {
+
+        //     console.log("Creating marker:", d.city);
+
+        //     const marker = document.createElement("div");
+
+        //     marker.className = "marker";
+
+        //     marker.innerHTML = "📍";
+
+        //     marker.style.fontSize = "20px";
+        //     marker.style.cursor = "pointer";
+        //     marker.style.pointerEvents = "auto";
+
+        //     marker.onclick = () => {
+        //     console.log("Clicked:", d.city);
+        //     };
+
+        //     return marker;
+
+        .pointsData(window.memories)
+
+        .pointLat(d => d.lat)
+
+        .pointLng(d => d.lng)
+
+        .pointAltitude(0.067)
+
+        .pointRadius(0.35)
+
+        .pointColor(() => "#c79c32")
+
+        //.pointsMerge(true)
+
+        .onPointClick(showMemory);
+
+        const card = document.getElementById("memoryCard");
+
+        const image = document.getElementById("memoryImage");
+
+        const city = document.getElementById("memoryCity");
+        function showMemory(memory) {
+
+            image.src = memory.image;
+            city.textContent = memory.city;
+
+            if (card.classList.contains("hidden")) {
+
+                card.classList.remove("hidden");
+
+                requestAnimationFrame(() => {
+                    card.classList.add("show");
+                });
+
+            }
+
+        }
+        const closeButton = document.getElementById("closeCard");
+
+        closeButton.addEventListener("click", () => {
+
+            card.classList.remove("show");
+
+            setTimeout(() => {
+
+                card.classList.add("hidden");
+
+            }, 300);
+
+        });
+    </script>
+
+</body>
+</html>
