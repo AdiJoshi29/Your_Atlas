@@ -287,7 +287,7 @@ window.memories = [
         lat: 43.0962,
         lng: -79.0750,
 
-        image: "photos/niagarafalls.jpg",
+        image: "photos/niagrafalls.jpg",
 
         date: "2025",
 
